@@ -1,0 +1,43 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: web-v1-deployment
+  namespace: default
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: website
+        version: green
+    spec:
+      containers:
+      - name: website-version-1
+        image: dockerpratik/node-test-server:v7
+        resources:
+          requests:
+            cpu: 0.1
+            memory: 200
+      - name: website-version-2
+        image: dockerpratik/python_test:v2
+        resources:
+          requests:
+            cpu: 0.1
+            memory: 200
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: website-service
+spec:
+  selector:
+    app: website
+  ports:
+    - name: http-8501
+      protocol: TCP
+      port: 8501
+      targetPort: 8501
+    - name: http-8500
+      protocol: TCP
+      port: 8500
+      targetPort: 8500
